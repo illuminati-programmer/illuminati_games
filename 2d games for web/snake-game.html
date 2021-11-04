@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Page Title</title>
+        <style>
+            button{
+                font-size:60px;
+                padding:0;
+                border:none;
+                background:#000020;
+            }
+            body{
+                background:#000020;
+            }
+            #score{
+                color:yellow;
+                font-size:100px;
+                margin-top:20px;
+            }
+        </style>
+        <script defer src="C:\Users\mark\Documents\GitHub\Illuminati_Games\2d games for web\games with emojis library.js"></script>
+        <script>
+
+
+function spawnTail(){
+    let x;
+    let y;
+    let sprite = "🟨";
+    let direction = snake.direction;
+    trigger=true;
+    triggerFunction=tailTriggerCallback;
+    capturingObject=snake;
+
+    var snake = new object(0, 0, "🟩", direction="right", false);
+    var apple = new object(3, 0, "🍎", "right", true, appleTriggerCallback, snake);
+    var tails = Array();//Array of tail objects
+
+    var score = 0;
+    var speed = 550;//How many milliseconds the snake movement interval will be set
+    var snakeMovement;//stores snake movement interval
+    
+    switch(direction){
+        case "right":
+            x=snake.x-2;
+            y=snake.y;
+            
+            if(tails.length>0){
+              x=tails[tails.length-1].x-1;
+              y=tails[tails.length-1].y;
+            }
+            break;
+        case "left":
+            x=snake.x+2;
+            y=snake.y;
+            
+            if(tails.length>0){
+              x=tails[tails.length-1].x+1;
+              y=tails[tails.length-1].y;
+            }
+            break;
+        case "up":
+            x=snake.x;
+            y=snake.y+2;
+            
+            if(tails.length>0){
+              x=tails[tails.length-1].x;
+              y=tails[tails.length-1].y+1;
+            }
+            break;
+        case "down":
+            x=snake.x;
+            y=snake.y-2;
+            
+            if(tails.length>0){
+              x=tails[tails.length-1].x;
+              y=tails[tails.length-1].y-1;
+            }
+            break;
+    }
+    
+    tails.push(new object(x,y,sprite,direction,trigger,triggerFunction,capturingObject));
+    spawnObject(tails[tails.length-1]);
+}
+
+function objectOut(){
+    clearInterval(snakeMovement);
+    document.write("<body style='background:#000020; padding-top:40px;'><center><h1 style='color:red'>GAME OVER</h1><hr><h1 style='color:yellow'>score: "+score+"</h1></center></body> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>");
+}
+
+function snakeMovementF(){
+        moveByDirection(snake);
+        if(tails.length>0){
+            let tmpdirections = Array(snake.direction);
+            for(let i = 0; i < tails.length; i++){
+                moveByDirection(tails[i]);
+                if(i!=0){
+                    tmpdirections[i]=tails[i-1].direction;
+                }
+            }
+            for(let i = 0; i < tails.length; i++){
+                tails[i].direction=tmpdirections[i];
+            }
+        }
+    }
+
+
+//trigger callback functions
+function appleTriggerCallback(){
+    moveToPoint(randInt(0, width-1), randInt(0, height-1), apple);
+    spawnObject(snake);
+    spawnTail();
+    score++;
+    document.querySelector("#score").innerHTML=score;
+}
+
+function tailTriggerCallback(){
+    objectOut();
+}
+
+
+window.onload=()=>{
+    output = document.querySelector(outputDivId);
+    
+
+    spawnObject(apple);
+    spawnObject(snake);
+    
+    snakeMovement = setInterval(snakeMovementF, speed);
+}
+
+        </script>
+    </head>
+    <body>
+    <center>
+        <div id="output" width="200px" height="200px"></div><br><br>
+        <button onclick="changeDirection(snake,'up')">⬆️</button><br>
+        <button onclick="changeDirection(snake,'left')">⬅️</button>
+        <button onclick="changeDirection(snake,'down')">⬇️</button>
+        <button onclick="changeDirection(snake,'right')">➡️</button>
+        <h1 id="score">0</h1>
+    </center>
+    </body>
+</html>
