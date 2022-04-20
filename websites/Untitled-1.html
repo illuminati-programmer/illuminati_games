@@ -1,0 +1,15 @@
+<script>
+    var passwd = prompt("Enter password")
+    var abc = "abcdefghijklmnopqrstuvwxyz".split("")
+    output==""
+    for (let k = 0; k < passwd.length; k++) {
+        const pswletter = passwd[k];
+        for (let i = 0; i < abc.length; i++) {
+            const abcletter = abc[i];
+            if(abcletter==pswletter){
+                output+=abc[i-3]
+            }
+        }
+    }
+        
+</script>
